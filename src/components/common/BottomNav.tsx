@@ -39,7 +39,7 @@ export default function BottomNav() {
   ];
 
   return (
-    <div className="self-stretch w-full h-14 flex justify-around items-center w-full">
+    <div className="self-stretch w-full h-14 flex justify-around items-center bg-white">
       {navItems.map((item) => {
         const isActive = item.activePaths.some((p) =>
           matchPath({ path: p, end: true }, location.pathname),
