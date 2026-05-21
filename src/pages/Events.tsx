@@ -54,36 +54,34 @@ const dateTabs = [
   { label: "화", display: "05", date: "2026-05-05" },
 ];
 
+// 하이픈 모양의 날짜를 피그마에서 보이는 모양인 .으로 이어는 함수
 function formatDateRange(start: string, end: string) {
-  if (start === end) return start.replaceAll("-", ".");
-  return `${start.replaceAll("-", ".")}~${end.replaceAll("-", ".")}`;
+  if (start === end) return start.replaceAll("-", "."); // 아카라카처럼 시작일과 종료일이 같으면 날짜가 하루로 나오게 함
+  return `${start.replaceAll("-", ".")}~${end.replaceAll("-", ".")}`; // 시작일과 종료일이 같으면 (시작일) ~ (종료일)로 나오게 함
 }
 
 export default function Events() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  //나중에 문자열 (날짜) 형태로 setSelectedDate를 바꿀때 <string | null>이 없으면 에러가 난다.
 
   const filtered =
     selectedDate === null
-      ? events
+      ? events //선택된 날짜가 없으면 모든 이벤트를 보여줌
       : events.filter(
           (e) => e.startDate <= selectedDate && e.endDate >= selectedDate,
+          //선택된 날짜보다 시작일이 빠르거나 같고, 선택된 날짜보다 종료일이 늦거나 같은 행사를 보여준다.
         );
 
   return (
     <div className="flex flex-col h-screen max-w-[390px] mx-auto bg-slate-200">
       <TopBar />
       {/* 상단 slate 영역: 타이틀 + 날짜 탭 */}
-
       <div className="shrink-0 pt-4">
-        {/* 타이틀 */}
         <div className="text-center text-base text-black font-normal font-['Inter'] mb-4">
           행사
         </div>
       </div>
-
-      {/* 흰 카드: 행사 목록 */}
       <div className="flex-1 bg-white rounded-tl-[10px] rounded-tr-[10px] shadow-[0px_-4px_4px_0px_rgba(0,0,0,0.05)] overflow-y-auto">
-        {/* 날짜 탭 */}
         <div className="flex gap-3 px-[23px] pb-4 pt-[17px] bg-white overflow-x-auto">
           {dateTabs.map((tab) => {
             const isSelected = tab.date === selectedDate;
@@ -104,6 +102,7 @@ export default function Events() {
             );
           })}
         </div>
+        {/* 위에서 정의한 filtered 함수를 통해 특정 날짜에 해당되는 이벤트들로 filtered */}
         {filtered.length === 0 ? (
           <div className="text-center text-gray-400 text-sm py-16">
             해당 날짜에 행사가 없습니다
@@ -125,15 +124,15 @@ export default function Events() {
                   <span className="text-black"> ㅣ {event.title}</span>
                 </div>
                 <div className="text-xs text-black font-normal font-['Inter'] leading-4">
-                  {formatDateRange(event.startDate, event.endDate)}
+                  {formatDateRange(event.startDate, event.endDate)}{" "}
+                  {/* 위에서 정의한 날짜를 보기좋게 바꿔주는 함수를 이용 */}
                 </div>
               </div>
             </div>
           ))
         )}
       </div>
-
-      {/* 하단바 고정 */}
+      {/* 하단 바는 하단에 고정함 */}
       <div className="shrink-0">
         <BottomNav />
       </div>
